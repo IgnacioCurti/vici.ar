@@ -22,6 +22,16 @@ Este repositorio contiene el proyecto vici.ar. A continuación se encuentran bue
 - **Ramas:** Sigue la convención de nombres de ramas descrita más abajo.
 - **Protección de ramas:** La rama main (o master) debe estar protegida y requerir revisiones antes de merge.
 
+Usaremos dos ramas principales para coordinar el flujo de trabajo y despliegue:
+
+- `main`: rama estable desde la que se tomará el código para el deploy en producción. Solo deben mergearse a `main` cambios ya revisados y probados.
+- `dev`: rama de integración donde se mergearán las `feature/*` y `fix/*`. En `dev` se realizan pruebas de integración y verificación antes de preparar releases o mergear a `main`.
+
+Reglas rápidas:
+
+- Hacer merge a `dev` cuando la feature/fix esté lista y aprobada por revisión.
+- Ejecutar pruebas en `dev` y resolver conflictos antes de promover cambios a `main`.
+- Hacer merge a `main` solo para versiones listas para producción.
 **Convención de nombres de ramas**
 
 Usaremos el siguiente formato para las ramas de trabajo:
