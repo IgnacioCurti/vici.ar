@@ -13,4 +13,5 @@ model Users {
   user_id  BigInt  @id @default(autoincrement())
   username String
   UID      String? @unique @db.Uuid
+  nickname String?
 }
