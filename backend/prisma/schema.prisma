@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../prisma/generated"
 }
 
 datasource db {
@@ -14,4 +14,43 @@ model Users {
   username String
   UID      String? @unique @db.Uuid
   nickname String?
+
+  // Relationships
+  hostedEvents Events[] @relation("EventHost")
+  eventParticipations EventsUsers[]
+}
+
+model Events {
+  event_id BigInt @id @default(autoincrement())
+  start_time DateTime
+  end_time DateTime
+  description String @db.Text
+  game_id String @unique @db.Uuid
+  host_id BigInt
+  schedule_at DateTime @default(now())
+
+  // Relationships
+  host Users @relation("EventHost", fields: [host_id], references: [user_id], onDelete: Cascade)
+  eventParticipants EventsUsers[]
+}
+
+model EventsUsers {
+  event_id BigInt @id @default(autoincrement())
+  user_id BigInt
+  status EventUserStatus @default(PENDING)
+
+  // Relationships
+  event Events @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
+  user Users @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@index([event_id])
+  @@index([user_id])
+
+}
+
+enum EventUserStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  TENTATIVE
 }
