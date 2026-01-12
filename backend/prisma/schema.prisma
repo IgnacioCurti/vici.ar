@@ -15,3 +15,13 @@ model Users {
   UID      String? @unique @db.Uuid
   nickname String?
 }
+
+model Events {
+  event_id BigInt @id @default(autoincrement())
+  start_time DateTime
+  end_time DateTime
+  description String @db.Text
+  game_id String @unique @db.Uuid
+  host_id BigInt
+  schedule_at DateTime @default(now())
+}
