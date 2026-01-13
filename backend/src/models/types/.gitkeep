@@ -1,0 +1,36 @@
+// // Representa el modelo de base de datos (similar a Prisma)
+// export interface User {
+//   userId: bigint;
+//   username: string;
+//   displayName: string | null;
+//   email: string;
+//   password: string;
+//   verificationCode: string | null;
+//   description: string | null;
+//   createdAt: Date;
+// }
+
+// // Usuario sin información sensible (para respuestas API)
+// export interface UserPublic {
+//   user_id: bigint;
+//   username: string;
+//   displayname: string | null;
+//   description: string | null;
+//   created_at: Date;
+// }
+
+// // Usuario con relaciones
+// export interface UserWithRelations extends User {
+//   hostedEvents?: Event[];
+//   eventParticipations?: EventsUsers[];
+//   availableTimes?: FreeTime[];
+//   sentFriendships?: Friendship[];
+//   receivedFriendships?: Friendship[];
+// }
+
+// // Para actualizaciones parciales
+// export interface UserUpdate {
+//   displayname?: string;
+//   description?: string;
+//   email?: string;
+// }

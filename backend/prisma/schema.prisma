@@ -10,42 +10,82 @@ datasource db {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Users {
-  user_id  BigInt  @id @default(autoincrement())
-  username String
-  UID      String? @unique @db.Uuid
-  nickname String?
+  user_id           BigInt   @id @default(autoincrement())
+  username          String   @unique
+  displayname       String?
+  email             String   @unique
+  password          String
+  verification_code String   @db.Text
+  description       String?
+  created_at        DateTime @default(now())
 
   // Relationships
-  hostedEvents Events[] @relation("EventHost")
+  hostedEvents        Events[]             @relation("EventHost")
   eventParticipations EventsUsers[]
+  availableTimes      FreeTime[]
+  sentFriendshps      UsersRelationships[] @relation("SentFriendRequests")
+  receivedFriendships UsersRelationships[] @relation("ReceivedFriendRequests")
 }
 
 model Events {
-  event_id BigInt @id @default(autoincrement())
-  start_time DateTime
-  end_time DateTime
-  description String @db.Text
-  game_id String @unique @db.Uuid
-  host_id BigInt
+  event_id    BigInt   @id @default(autoincrement())
+  start_time  DateTime
+  end_time    DateTime
+  description String   @db.Text
+  game_id     String   @unique @db.Uuid
+  host_id     BigInt
   schedule_at DateTime @default(now())
 
   // Relationships
-  host Users @relation("EventHost", fields: [host_id], references: [user_id], onDelete: Cascade)
+  host              Users         @relation("EventHost", fields: [host_id], references: [user_id], onDelete: Cascade)
   eventParticipants EventsUsers[]
 }
 
 model EventsUsers {
-  event_id BigInt @id @default(autoincrement())
-  user_id BigInt
-  status EventUserStatus @default(PENDING)
+  event_id BigInt          @id @default(autoincrement())
+  user_id  BigInt
+  status   EventUserStatus @default(PENDING)
 
   // Relationships
   event Events @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
-  user Users @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user  Users  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
   @@index([event_id])
   @@index([user_id])
+}
 
+model FreeTime {
+  free_time_id  BigInt    @id @default(autoincrement())
+  user_id       BigInt
+  day_of_week   Int?
+  specific_date DateTime? @db.Date
+  start_tune    DateTime  @db.Time()
+  end_time      DateTime  @db.Time()
+  is_recurrent  Boolean
+  is_active     Boolean   @default(true)
+  valid_until   DateTime? @db.Date
+
+  user Users @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([free_time_id])
+  @@index([specific_date])
+}
+
+model UsersRelationships {
+  relationship_id  BigInt             @id @default(autoincrement())
+  status           RelationshipStatus
+  status_timestamp DateTime
+  sender_id        BigInt
+  receiver_id      BigInt
+
+  sender   Users @relation("SentFriendRequests", fields: [sender_id], references: [user_id], onDelete: Cascade)
+  receiver Users @relation("ReceivedFriendRequests", fields: [receiver_id], references: [user_id], onDelete: Cascade)
+
+  @@index([relationship_id])
+  @@index([sender_id])
+  @@index([receiver_id])
+  @@index([status])
 }
 
 enum EventUserStatus {
@@ -53,4 +93,10 @@ enum EventUserStatus {
   ACCEPTED
   DECLINED
   TENTATIVE
+}
+
+enum RelationshipStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
 }
