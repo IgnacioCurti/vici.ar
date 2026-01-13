@@ -1,0 +1,40 @@
+// // DTO = Data Transfer Object (lo que entra/sale de tu API)
+
+// // Request: Crear usuario
+// export interface CreateUserDTO {
+//   username: string;
+//   email: string;
+//   password: string;
+//   displayname?: string;
+// }
+
+// // Request: Actualizar usuario
+// export interface UpdateUserDTO {
+//   displayname?: string;
+//   description?: string;
+//   email?: string;
+// }
+
+// // Response: Usuario público (sin password)
+// export interface UserResponseDTO {
+//   user_id: string; // Convertido a string para JSON
+//   username: string;
+//   displayname: string | null;
+//   description: string | null;
+//   email: string;
+//   created_at: string; // ISO string
+// }
+
+// // Response: Lista de usuarios
+// export interface UsersListResponseDTO {
+//   users: UserResponseDTO[];
+//   total: number;
+//   page: number;
+//   limit: number;
+// }
+
+// // Response: Perfil completo
+// export interface UserProfileDTO extends UserResponseDTO {
+//   friendsCount: number;
+//   eventsHosted: number;
+// }
