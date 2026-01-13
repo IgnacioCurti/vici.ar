@@ -19,12 +19,15 @@ model Users {
   description       String?
   created_at        DateTime @default(now())
 
-  // Relationships
   hostedEvents        Events[]             @relation("EventHost")
   eventParticipations EventsUsers[]
   availableTimes      FreeTime[]
   sentFriendshps      UsersRelationships[] @relation("SentFriendRequests")
   receivedFriendships UsersRelationships[] @relation("ReceivedFriendRequests")
+
+  @@index([user_id])
+  @@index([username])
+  @@index([email])
 }
 
 model Events {
@@ -36,7 +39,6 @@ model Events {
   host_id     BigInt
   schedule_at DateTime @default(now())
 
-  // Relationships
   host              Users         @relation("EventHost", fields: [host_id], references: [user_id], onDelete: Cascade)
   eventParticipants EventsUsers[]
 }
@@ -46,7 +48,6 @@ model EventsUsers {
   user_id  BigInt
   status   EventUserStatus @default(PENDING)
 
-  // Relationships
   event Events @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
   user  Users  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
@@ -59,7 +60,7 @@ model FreeTime {
   user_id       BigInt
   day_of_week   Int?
   specific_date DateTime? @db.Date
-  start_tune    DateTime  @db.Time()
+  start_time    DateTime  @db.Time()
   end_time      DateTime  @db.Time()
   is_recurrent  Boolean
   is_active     Boolean   @default(true)
