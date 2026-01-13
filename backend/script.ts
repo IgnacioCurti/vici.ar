@@ -1,4 +1,4 @@
-import { prisma } from './lib/prisma'
+import { prisma } from './src/config/prisma'
 
 async function main() {
   //change to reference a table in your schema
