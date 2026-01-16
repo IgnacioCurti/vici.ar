@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import '../styles/navbar.css';
+import "../styles/navbar.css";
 
 interface NavbarProps {
   className?: string;
@@ -7,39 +6,12 @@ interface NavbarProps {
   onRegisterClick?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ 
-  className = '',
-  onLoginClick,
-  onRegisterClick 
-}) => {
-  const handleLogin = () => {
-    if (onLoginClick) {
-      onLoginClick();
-    } else {
-      console.log('Redirigiendo a login...');
-    }
-  };
-
-  const handleRegister = () => {
-    if (onRegisterClick) {
-      onRegisterClick();
-    } else {
-      console.log('Redirigiendo a registro...');
-    }
-  };
-
+const Navbar: React.FC<NavbarProps> = ({ className = "" }) => {
   return (
     <nav className={`navbar ${className}`}>
       <div className="navbar-container">
         <div className="navbar-logo">
-          <a 
-            href="/" 
-            onClick={(e: React.MouseEvent) => {
-              e.preventDefault();
-              console.log('Navegando a inicio...');
-            }}
-            aria-label="VICI.AR - Inicio"
-          >
+          <a href="/" aria-label="VICI.AR - Inicio">
             <span className="logo-text">VICI</span>
             <span className="logo-dot">.</span>
             <span className="logo-ar">AR</span>
@@ -47,9 +19,8 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         <div className="navbar-actions">
-          <button 
-            className="btn btn-primary" 
-            onClick={handleRegister}
+          <button
+            className="btn btn-primary"
             type="button"
             aria-label="Registrarse"
           >
@@ -58,7 +29,6 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
     </nav>
-    
   );
 };
 

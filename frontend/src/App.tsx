@@ -1,14 +1,13 @@
-import React from 'react';
-import './App.css';
-import Navbar from './app/components/navbar';
+import "./App.css";
+import Navbar from "./app/components/navbar";
 
 function App() {
   return (
     <div className="app">
       <Navbar />
-      <div className='buttoms'>
-        <button className='ini'>Iniciar sesión</button>
-        <button className='reg'>Registrarse</button>
+      <div className="buttons-container">
+        <button className="login-button">Iniciar sesión</button>
+        <button className="register-button">Registrarse</button>
       </div>
     </div>
   );
