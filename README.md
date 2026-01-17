@@ -4,22 +4,22 @@ Este repositorio contiene el proyecto vici.ar. A continuación se encuentran bue
 
 **Buenas Prácticas de Programación**
 
-- **Legibilidad:** Escribe código claro y fácil de leer. Prefiere nombres descriptivos para variables, funciones y clases.
-- **Modularidad:** Divide la lógica en funciones y módulos pequeños y con una sola responsabilidad.
-- **Documentación:** Añade comentarios cuando la intención no sea obvia y mantén la documentación actualizada. Usa README.md y comentarios en el código para explicar decisiones importantes.
-- **Pruebas:** Cubre la lógica crítica con pruebas automatizadas (unitarias, de integración). Ejecuta las pruebas antes de abrir un pull request.
-- **Manejo de errores:** Maneja errores de forma explícita y escribe mensajes que ayuden al diagnóstico.
-- **Performance:** Optimiza solo cuando haya evidencia de problemas. Prefiere soluciones simples y medibles.
-- **Seguridad:** Evita exponer secretos en el repositorio. Usa variables de entorno y almacenamiento seguro para credenciales.
-- **Revisión de Código:** Solicita y responde revisiones con cortesía. Apunta a pull requests pequeños y fáciles de revisar.
+- **Legibilidad:** Escriba código claro y fácil de leer. Use nombres descriptivos para variables, funciones y clases.
+- **Modularidad:** Divida la lógica en funciones y módulos pequeños y con una sola responsabilidad.
+- **Documentación:** Añada comentarios cuando la intención no sea obvia y mantén la documentación actualizada. Use README.md y comentarios en el código para explicar decisiones importantes.
+- **Pruebas:** Cubra la lógica crítica con pruebas automatizadas (unitarias, de integración). Ejecute las pruebas antes de abrir un pull request.
+- **Manejo de errores:** Maneje errores de forma explícita y escriba mensajes que ayuden al diagnóstico.
+- **Performance:** Optimice solo cuando haya evidencia de problemas. Es preferible soluciones simples y medibles.
+- **Seguridad:** Evite exponer secretos en el repositorio. Use variables de entorno y almacenamiento seguro para credenciales.
+- **Revisión de Código:** Solicite y responda revisiones. Apunte a pull requests pequeños y fáciles de revisar.
 
 **Buenas Prácticas de Git**
 
 - **Commits atómicos:** Cada commit debe representar un cambio lógico y autocontenido.
-- **Mensajes claros:** Escribe mensajes de commit descriptivos, por ejemplo: "Agrega validación de email en el formulario de registro".
+- **Mensajes claros:** Escriba mensajes de commit descriptivos, por ejemplo: "Agrega validación de email en el formulario de registro".
 - **Rebase vs Merge:** Rebase localmente para mantener un historial lineal cuando trabajes en una rama feature. Evita reescribir historial compartido.
-- **Pull requests pequeños:** Los PRs deben ser lo suficientemente pequeños para revisar con facilidad. Incluye descripción clara y pasos para probar.
-- **Ramas:** Sigue la convención de nombres de ramas descrita más abajo.
+- **Pull requests pequeños:** Los PRs deben ser lo suficientemente pequeños para revisar con facilidad. Incluya descripción clara y pasos para probar.
+- **Ramas:** Siga la convención de nombres de ramas descrita más abajo.
 - **Protección de ramas:** La rama main (o master) debe estar protegida y requerir revisiones antes de merge.
 
 Usaremos dos ramas principales para coordinar el flujo de trabajo y despliegue:
@@ -45,18 +45,18 @@ Usaremos el siguiente formato para las ramas de trabajo:
 
 Reglas adicionales:
 
-- Usa `-` para separar palabras dentro del nombre de la feature.
-- Mantén los nombres cortos pero descriptivos (no más de 4-6 palabras cuando sea posible).
-- Si tu trabajo incluye cambios en ambos lados (backend y frontend), crea ramas separadas por cada repositorio o, si trabajas en mono-repo, especifica ambos prefijos cuando corresponda (por ejemplo `feature/FE-BE-nombre`), aunque preferimos ramas separadas por responsabilidad.
+- Use `-` para separar palabras dentro del nombre de la feature.
+- Mantenga los nombres cortos pero descriptivos (no más de 4-6 palabras cuando sea posible).
+- Si su trabajo incluye cambios en ambos lados (backend y frontend), cree ramas separadas por cada repositorio o, si trabaja en mono-repo, especifique ambos prefijos cuando corresponda (por ejemplo `feature/FE-BE-nombre`), aunque preferimos ramas separadas por responsabilidad.
 
 **Flujo sugerido**
 
-1. Sincroniza `main`: `git checkout main` y `git pull origin main`.
-2. Crea tu rama: `git checkout -b feature/FE-mi-feature`.
-3. Trabaja y haz commits atómicos frecuentemente.
-4. Mantén tu rama actualizada con `main` mediante rebase o merge: `git fetch origin` y `git rebase origin/main`.
-5. Empuja la rama remota: `git push -u origin feature/FE-mi-feature`.
-6. Abre un Pull Request para revisión.
+1. Sincronice `main`: `git checkout main` y `git pull origin main`.
+2. Cree su rama: `git checkout -b feature/FE-mi-feature`.
+3. Trabaje y haga commits atómicos frecuentemente.
+4. Mantenga tu rama actualizada con `main` mediante rebase o merge: `git fetch origin` y `git rebase origin/main`.
+5. Pushee la rama remota: `git push -u origin feature/FE-mi-feature`.
+6. Abra un Pull Request para revisión.
 
 **Checklist antes de abrir un Pull Request**
 
