@@ -1,4 +1,4 @@
-import "../styles/navbar.css";
+import "../../styles/navbar.css";
 
 interface NavbarProps {
   className?: string;
