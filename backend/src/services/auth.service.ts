@@ -1,7 +1,8 @@
 import prisma from '../config/prisma';
 import type { Users } from '../../prisma/generated/client';
 import type { RegisterDto } from '../models/dto/auth.dto';
-';
+import { hashPassword } from '../utils/bcrypt';
+import { generateToken } from '../middlewares/middleware';
 
 export class AuthService {
 
@@ -15,18 +16,22 @@ export class AuthService {
       throw new Error('Email already registered');
     }
 
-    if (dto.password.length < 6) {
-      throw new Error('Password must be at least 6 characters')
-    }
+    const hashedPassword = await hashPassword(dto.password);
 
-    const hashedPassword = 'hashedpassword' //implementar hash
+    const verification_code = Math.floor(100000 + Math.random() * 900000).toString();
 
     const user = await prisma.users.create({
       data: {
         email: dto.email,
         username: dto.username,
         password: hashedPassword,
+        verification_code: verification_code
       },
+    });
+
+    const token = generateToken({
+      userId: Number(user.user_id),
+      email: user.email
     });
 
     return { token, user };
