@@ -1,38 +1,47 @@
-
 import type { Request, Response } from 'express';
+import authService from '../services/auth.service';
+import { HttpResponse } from '../utils/http.response';
+import { toUserResponse } from '../models/dto/user.dto';
 
 export class AuthController {
-  /**
-   * POST /auth/register
-   * Registrar nuevo usuario
-   */
+  constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) { }
 
-  async register(req: Request, res: Response): Promise<void> {
+  async register(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, name, password } = req.body;
+      const { email, username, password } = req.body;
 
-      if (!email || !name || !password) {
-        res.status(400).json('All fields are required');
-        return;
+      if (!email || !username || !password) {
+        return res.status(400).json({ message: "All field are required" });
       }
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        res.status(400).json('Invalid email format');
+      const emailPattern: RegExp = new RegExp(
+        "/^[^\s@]+@[^\s@]+\.[^\s@]+$/"
+      );
+      if (!emailPattern.test(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+      }
+
+      const passwordPattern: RegExp = new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$"
+      );
+      if (!passwordPattern.test(req.body.password)) {
+        return res
+          .status(400)
+          .json({ message: "Password doesn't match the requirements." });
       }
 
       const { token, user } = await authService.register({
         email,
-        name,
+        username,
         password,
       });
 
-      res.status(200).json('User registration successfully')
+      return res.status(201).json({ message: "User created", token, user: toUserResponse(user), });
 
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Error registering user';
-      res.status(400).json(message)
+      return this.httpResponse.Error(res, error);
     }
   }
 }
