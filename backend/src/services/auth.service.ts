@@ -1,14 +1,14 @@
 import prisma from '../config/prisma';
-import type { Users } from '../../prisma/generated/client';
 import type { RegisterDto } from '../models/dto/auth.dto';
 import { hashPassword } from '../utils/bcrypt';
 import { generateToken } from '../middlewares/middleware';
+import type { User } from '../../prisma/generated/client';
 
 export class AuthService {
 
-  async register(dto: RegisterDto): Promise<{ token: string; user: Users }> {
+  async register(dto: RegisterDto): Promise<{ token: string; user: User }> {
 
-    const existingUser = await prisma.users.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: { email: dto.email }
     });
 
@@ -20,7 +20,7 @@ export class AuthService {
 
     const verification_code = Math.floor(100000 + Math.random() * 900000).toString();
 
-    const user = await prisma.users.create({
+    const user = await prisma.user.create({
       data: {
         email: dto.email,
         username: dto.username,
