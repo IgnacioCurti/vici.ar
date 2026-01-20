@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node src/index.ts",
-    "dev": "nodemon built/index.js",
+    "start": "node dist/src/index.js",
+    "dev": "nodemon --exec tsx src/index.ts",
     "test": "echo test"
   },
   "keywords": [],
