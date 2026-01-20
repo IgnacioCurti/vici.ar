@@ -38,7 +38,31 @@ export class AuthController {
 
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Error registering user';
+        error instanceof Error ? error.message : "Error registering user";
+      return this.httpResponse.Error(res, message);
+    }
+  }
+
+  async login(req: Request, res: Response): Promise<Response> {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+      }
+
+      const { token, user } = await authService.login({ email, password });
+
+      return res.status(200).json({ message: "User loged in", token, user: toUserResponse(user), })
+
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Error loging in";
       return this.httpResponse.Error(res, message);
     }
   }
