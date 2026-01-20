@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
-import authService from '../services/auth.service';
-import { HttpResponse } from '../utils/http.response';
-import { toUserResponse } from '../models/dto/user.dto';
+import authService from '../services/auth.service.js';
+import { HttpResponse } from '../utils/http.response.js';
+import { toUserResponse } from '../models/dto/user.dto.js';
 
 export class AuthController {
   constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) { }

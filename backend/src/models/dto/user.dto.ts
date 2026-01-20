@@ -1,4 +1,4 @@
-import type { User } from "../../../prisma/generated/client";
+import type { User } from "../../../prisma/generated/client.js";
 
 export type UserResponseDto = {
   userId: number;
