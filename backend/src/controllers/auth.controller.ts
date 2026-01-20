@@ -11,12 +11,10 @@ export class AuthController {
       const { email, username, password } = req.body;
 
       if (!email || !username || !password) {
-        return res.status(400).json({ message: "All field are required" });
+        return res.status(400).json({ message: "All fields are required" });
       }
 
-      const emailPattern: RegExp = new RegExp(
-        "/^[^\s@]+@[^\s@]+\.[^\s@]+$/"
-      );
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(email)) {
         return res.status(400).json({ message: "Invalid email format" });
       }
@@ -41,7 +39,7 @@ export class AuthController {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Error registering user';
-      return this.httpResponse.Error(res, error);
+      return this.httpResponse.Error(res, message);
     }
   }
 }
