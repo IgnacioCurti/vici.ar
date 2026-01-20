@@ -1,4 +1,8 @@
 import jwt from 'jsonwebtoken';
+import type { Request, Response, NextFunction } from 'express';
+import { HttpResponse } from '../utils/http.response.js';
+
+const httpResponse = new HttpResponse();
 
 if (!process.env.JWT_SECRET_KEY) {
   throw new Error("JWT_SECRET is not defined in .env");
@@ -30,3 +34,33 @@ export const decodeToken = (token: string): JwtPayload | null => {
     return null;
   }
 };
+
+export function auth(req: Request, res: Response, next: NextFunction): void {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      httpResponse.Unauthorized(res, "Token not provided. Format: Bearer <token>");
+      return;
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+      httpResponse.Unauthorized(res, "Token not provided");
+      return;
+    }
+
+    const decoded = verifyToken(token);
+
+    if (!decoded) {
+      httpResponse.Unauthorized(res, "Invalid token");
+      return;
+    }
+
+    next();
+
+  } catch (error) {
+    httpResponse.Unauthorized(res, "Authentication error");
+  }
+}
