@@ -58,11 +58,11 @@ export class AuthController {
 
       const { token, user } = await authService.login({ email, password });
 
-      return res.status(200).json({ message: "User loged in", token, user: toUserResponse(user), })
+      return res.status(200).json({ message: "User logged in", token, user: toUserResponse(user), })
 
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Error loging in";
+        error instanceof Error ? error.message : "Error logging in";
       return this.httpResponse.Error(res, message);
     }
   }
