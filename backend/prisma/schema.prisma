@@ -9,7 +9,7 @@ datasource db {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model Users {
+model User {
   user_id           BigInt   @id @default(autoincrement())
   username          String   @unique
   displayname       String?
@@ -28,6 +28,7 @@ model Users {
   @@index([user_id])
   @@index([username])
   @@index([email])
+  @@map("Users")
 }
 
 model Events {
@@ -39,7 +40,7 @@ model Events {
   host_id     BigInt
   schedule_at DateTime @default(now())
 
-  host              Users         @relation("EventHost", fields: [host_id], references: [user_id], onDelete: Cascade)
+  host              User          @relation("EventHost", fields: [host_id], references: [user_id], onDelete: Cascade)
   eventParticipants EventsUsers[]
 }
 
@@ -49,7 +50,7 @@ model EventsUsers {
   status   EventUserStatus @default(PENDING)
 
   event Events @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
-  user  Users  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user  User  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
   @@index([event_id])
   @@index([user_id])
@@ -66,7 +67,7 @@ model FreeTime {
   is_active     Boolean   @default(true)
   valid_until   DateTime? @db.Date
 
-  user Users @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
   @@index([user_id])
   @@index([free_time_id])
@@ -80,8 +81,8 @@ model UsersRelationships {
   sender_id        BigInt
   receiver_id      BigInt
 
-  sender   Users @relation("SentFriendRequests", fields: [sender_id], references: [user_id], onDelete: Cascade)
-  receiver Users @relation("ReceivedFriendRequests", fields: [receiver_id], references: [user_id], onDelete: Cascade)
+  sender   User @relation("SentFriendRequests", fields: [sender_id], references: [user_id], onDelete: Cascade)
+  receiver User @relation("ReceivedFriendRequests", fields: [receiver_id], references: [user_id], onDelete: Cascade)
 
   @@index([relationship_id])
   @@index([sender_id])
