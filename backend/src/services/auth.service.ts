@@ -1,6 +1,6 @@
 import prisma from '../config/prisma.js';
-import type { RegisterDto } from '../models/dto/auth.dto.js';
-import { hashPassword } from '../utils/bcrypt.js';
+import type { LoginDto, RegisterDto } from '../models/dto/auth.dto.js';
+import { comparePassword, hashPassword } from '../utils/bcrypt.js';
 import { generateToken } from '../middleware/middleware.js';
 import type { User } from '../../prisma/generated/client.js';
 
@@ -35,6 +35,31 @@ export class AuthService {
     });
 
     return { token, user };
+  }
+
+  async login(dto: LoginDto): Promise<{ token: string; user: User }> {
+
+    const user = await prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      throw new Error('Invalid email or password');
+    }
+
+    const isPasswordValid = await comparePassword(dto.password, user.password);
+
+    if (!isPasswordValid) {
+      throw new Error('Invalid email or password')
+    }
+
+    const token = generateToken({
+      userId: Number(user.user_id),
+      email: user.email,
+    })
+
+    return { token, user }
+
   }
 
 }
