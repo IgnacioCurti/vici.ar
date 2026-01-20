@@ -1,8 +1,8 @@
-import prisma from '../config/prisma';
-import type { RegisterDto } from '../models/dto/auth.dto';
-import { hashPassword } from '../utils/bcrypt';
-import { generateToken } from '../middlewares/middleware';
-import type { User } from '../../prisma/generated/client';
+import prisma from '../config/prisma.js';
+import type { RegisterDto } from '../models/dto/auth.dto.js';
+import { hashPassword } from '../utils/bcrypt.js';
+import { generateToken } from '../middleware/middleware.js';
+import type { User } from '../../prisma/generated/client.js';
 
 export class AuthService {
 
