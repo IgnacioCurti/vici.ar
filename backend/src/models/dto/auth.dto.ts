@@ -1,4 +1,3 @@
-import type { Users } from '../../../prisma/generated/client';
 
 export interface RegisterDto {
   email: string;
