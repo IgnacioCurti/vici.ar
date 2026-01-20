@@ -2,42 +2,42 @@ import type { Response } from "express";
 import { STATUS_CODES } from "../constants/httpStatusCode.js";
 
 export class HttpResponse {
-  Ok(res: Response, data?: any): Response {
+  Ok(res: Response, message?: string, data?: any): Response {
     return res.status(STATUS_CODES.OK).json({
       status: STATUS_CODES.OK,
-      statusMsg: "Success",
+      statusMsg: message && "Success",
       data: data,
     });
   }
 
-  NotFound(res: Response, data?: any): Response {
+  NotFound(res: Response, message?: string, data?: any): Response {
     return res.status(STATUS_CODES.NOT_FOUND).json({
       status: STATUS_CODES.NOT_FOUND,
-      statusMsg: "Not Found",
+      statusMsg: message && "Not Found",
       error: data,
     });
   }
 
-  Unauthorized(res: Response, data?: any): Response {
+  Unauthorized(res: Response, message?: string, data?: any): Response {
     return res.status(STATUS_CODES.UNAUTHORIZED).json({
       status: STATUS_CODES.UNAUTHORIZED,
-      statusMsg: "Unauthorized",
+      statusMsg: message && 'Unauthorized',
       error: data,
     });
   }
 
-  Forbidden(res: Response, data?: any): Response {
+  Forbidden(res: Response, message?: string, data?: any): Response {
     return res.status(STATUS_CODES.FORBIDDEN).json({
       status: STATUS_CODES.FORBIDDEN,
-      statusMsg: "Forbidden",
+      statusMsg: message && "Forbidden",
       error: data,
     });
   }
 
-  Error(res: Response, data?: any): Response {
+  Error(res: Response, message?: string, data?: any): Response {
     return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
       status: STATUS_CODES.INTERNAL_SERVER_ERROR,
-      statusMsg: "Internal server error",
+      statusMsg: message && "Internal server error",
       error: data,
     });
   }
