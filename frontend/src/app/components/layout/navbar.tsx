@@ -1,35 +1,46 @@
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Button,
+  Link,
+} from "@heroui/react";
 import "../../styles/navbar.css";
 
-interface NavbarProps {
-  className?: string;
-  onLoginClick?: () => void;
-  onRegisterClick?: () => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ className = "" }) => {
+export function AppNavbar() {
   return (
-    <nav className={`navbar ${className}`}>
-      <div className="navbar-container">
-        <div className="navbar-logo">
-          <a href="/" aria-label="VICI.AR - Inicio">
-            <span className="logo-text">VICI</span>
-            <span className="logo-dot">.</span>
-            <span className="logo-ar">AR</span>
-          </a>
-        </div>
-
-        <div className="navbar-actions">
-          <button
-            className="btn btn-primary"
-            type="button"
-            aria-label="Registrarse"
-          >
-            Registrarse
-          </button>
-        </div>
-      </div>
-    </nav>
+    <Navbar>
+      <NavbarBrand>
+        <p className="font-bold text-inherit">ACME</p>
+      </NavbarBrand>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem>
+          <Link color="foreground" href="#">
+            Features
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive>
+          <Link aria-current="page" href="#">
+            Customers
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="#">
+            Integrations
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end">
+        <NavbarItem className="hidden lg:flex">
+          <Link href="#">Login</Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Button as={Link} color="primary" href="#" variant="flat">
+            Sign Up
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+    </Navbar>
   );
-};
-
-export default Navbar;
+}
