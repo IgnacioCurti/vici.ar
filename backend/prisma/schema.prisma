@@ -18,6 +18,7 @@ model User {
   email               String               @unique
   password            String
   verification_code   String
+  email_verified      Boolean              @default(false)
   hostedEvents        Events[]             @relation("EventHost")
   eventParticipations EventsUsers[]
   availableTimes      FreeTime[]
