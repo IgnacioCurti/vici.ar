@@ -28,13 +28,13 @@ export class AuthController {
           .json({ message: "Password doesn't match the requirements." });
       }
 
-      const { token, user } = await authService.register({
+      const { token, userResponse } = await authService.register({
         email,
         username,
         password,
       });
 
-      return res.status(201).json({ message: "User created", token, user: toUserResponse(user), });
+      return res.status(201).json({ message: "User created", token, user: userResponse, });
 
     } catch (error) {
       const message =
@@ -45,15 +45,20 @@ export class AuthController {
 
   async verifyEmail(req: Request, res: Response): Promise<Response> {
     try {
-      const { code } = req.body;
+      const { id, code } = req.params
 
-      if (!code) {
-        return this.httpResponse.BadRequest(res, "Code required");
+      if (typeof id !== "string" || typeof code !== "string") {
+        return this.httpResponse.BadRequest(res, "Invalid id or code");
       }
 
-      const user = await authService.verifyEmail(code);
+      const userId = Number(id);
+      if (isNaN(userId)) {
+        return this.httpResponse.BadRequest(res, "Invalid user id");
+      }
 
-      return this.httpResponse.Ok(res, "Email verified successfully", toUserResponse(user));
+      const user = await authService.verifyEmail(userId, code);
+
+      return this.httpResponse.Ok(res, "Email verified successfully", user);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Email verification error';
       return this.httpResponse.BadRequest(res, message);
@@ -73,9 +78,9 @@ export class AuthController {
         return res.status(400).json({ message: "Invalid email format" });
       }
 
-      const { token, user } = await authService.login({ email, password });
+      const { token, userResponse } = await authService.login({ email, password });
 
-      return res.status(200).json({ message: "User logged in", token, user: toUserResponse(user), })
+      return res.status(200).json({ message: "User logged in", token, user: userResponse, })
 
     } catch (error) {
       const message =
