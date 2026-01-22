@@ -4,10 +4,11 @@ import { comparePassword, hashPassword } from '../utils/bcrypt.js';
 import { generateToken } from '../middleware/middleware.js';
 import type { User } from '../../prisma/generated/client.js';
 import emailService from './email.service.js';
+import { toUserResponse, type UserResponseDto } from '../models/dto/user.dto.js';
 
 export class AuthService {
 
-  async register(dto: RegisterDto): Promise<{ token: string; user: User }> {
+  async register(dto: RegisterDto): Promise<{ token: string; userResponse: UserResponseDto }> {
 
     const existingUser = await prisma.user.findUnique({
       where: { email: dto.email }
@@ -37,15 +38,24 @@ export class AuthService {
       email: user.email
     });
 
-    return { token, user };
+    const userResponse = toUserResponse(user);
+    return { token, userResponse };
   }
 
-  async verifyEmail(code: string): Promise<User> {
+  async verifyEmail(id: number, code: string): Promise<UserResponseDto> {
     const user = await prisma.user.findFirst({
-      where: {verification_code: code}
+      where: {user_id: id}
     });
 
     if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.email_verified == true) {
+      throw new Error("User already verified")
+    }
+
+    if (user.verification_code !== code) {
       throw new Error("Invalid verification code");
     }
 
@@ -56,10 +66,12 @@ export class AuthService {
       }
     });
 
-    return updateUser;
+    const userResponse = toUserResponse(updateUser);
+
+    return userResponse;
   }
 
-  async login(dto: LoginDto): Promise<{ token: string; user: User }> {
+  async login(dto: LoginDto): Promise<{ token: string; userResponse: UserResponseDto }> {
 
     const user = await prisma.user.findUnique({
       where: { email: dto.email },
@@ -80,7 +92,9 @@ export class AuthService {
       email: user.email,
     })
 
-    return { token, user }
+    const userResponse = toUserResponse(user);
+
+    return { token, userResponse }
 
   }
 
