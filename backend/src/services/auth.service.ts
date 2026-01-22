@@ -3,6 +3,7 @@ import type { LoginDto, RegisterDto } from '../models/dto/auth.dto.js';
 import { comparePassword, hashPassword } from '../utils/bcrypt.js';
 import { generateToken } from '../middleware/middleware.js';
 import type { User } from '../../prisma/generated/client.js';
+import emailService from './email.service.js';
 
 export class AuthService {
 
@@ -29,12 +30,33 @@ export class AuthService {
       },
     });
 
+    await emailService.sendVerificationEmail(user.email, verification_code);
+
     const token = generateToken({
       userId: Number(user.user_id),
       email: user.email
     });
 
     return { token, user };
+  }
+
+  async verifyEmail(code: string): Promise<User> {
+    const user = await prisma.user.findFirst({
+      where: {verification_code: code}
+    });
+
+    if (!user) {
+      throw new Error("Invalid verification code");
+    }
+
+    const updateUser = await prisma.user.update({
+      where: {user_id: user.user_id},
+      data: {
+        email_verified: true
+      }
+    });
+
+    return updateUser;
   }
 
   async login(dto: LoginDto): Promise<{ token: string; user: User }> {
