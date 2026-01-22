@@ -43,6 +43,23 @@ export class AuthController {
     }
   }
 
+  async verifyEmail(req: Request, res: Response): Promise<Response> {
+    try {
+      const { code } = req.body;
+
+      if (!code) {
+        return this.httpResponse.BadRequest(res, "Code required");
+      }
+
+      const user = await authService.verifyEmail(code);
+
+      return this.httpResponse.Ok(res, "Email verified successfully", toUserResponse(user));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Email verification error';
+      return this.httpResponse.BadRequest(res, message);
+    }
+  }
+
   async login(req: Request, res: Response): Promise<Response> {
     try {
       const { email, password } = req.body;
