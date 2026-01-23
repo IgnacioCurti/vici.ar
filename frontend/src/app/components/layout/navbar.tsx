@@ -8,7 +8,7 @@ import {
 } from "@heroui/react";
 import "../../styles/navbar.css";
 
-export function AppNavbar() {
+const AppNavbar = () => {
   return (
     <Navbar>
       <NavbarBrand>
@@ -44,3 +44,5 @@ export function AppNavbar() {
     </Navbar>
   );
 }
+
+export default AppNavbar;
