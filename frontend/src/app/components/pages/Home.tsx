@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
+import { Button} from "@heroui/react";
 import "../../styles/homeStyles.css";
 
 const Home = () => {
   return (
     <div className="buttons-container">
       <Link to="/login">
-        <button className="login-button">Iniciar sesión</button>
+        <Button color="primary">Iniciar sesión</Button>
       </Link>
 
       <Link to="/register">
-        <button className="register-button">Registrarse</button>
+        <Button color="secondary">Registrarse</Button>
       </Link>
     </div>
   );
