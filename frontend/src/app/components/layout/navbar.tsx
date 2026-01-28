@@ -16,6 +16,7 @@ import {
   DropdownItem,
 } from "@heroui/react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
+import RegisterModal from "../auth/RegisterModal"; 
 
 /* =======================
    Logo
@@ -31,108 +32,119 @@ export const AcmeLogo: React.FC = () => {
 ======================= */
 const AppNavbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   return (
-    <Navbar
-      isBordered={false}
-      maxWidth="full"
-      className="w-full custom-navbar"
-      isMenuOpen={isMenuOpen}
-      onMenuOpenChange={setIsMenuOpen}
-    >
-      {/* LEFT */}
-      <NavbarContent justify="start">
-        {/* ☰ SOLO MOBILE */}
-        <NavbarMenuToggle className="md:hidden" />
+    <>
+      <Navbar
+        isBordered={false}
+        maxWidth="full"
+        className="w-full custom-navbar"
+        isMenuOpen={isMenuOpen}
+        onMenuOpenChange={setIsMenuOpen}
+      >
+        {/* LEFT */}
+        <NavbarContent justify="start">
+          <NavbarMenuToggle className="md:hidden" />
 
-        <NavbarBrand className="flex items-center gap-1">
-          <Link to="/" className="logo-link">
-            <AcmeLogo />
-            <span className="logo-text">VICI</span>
-            <span className="logo-dot">.</span>
-            <span className="logo-ar">AR</span>
-          </Link>
-        </NavbarBrand>
+          <NavbarBrand className="flex items-center gap-1">
+            <Link to="/" className="logo-link">
+              <AcmeLogo />
+              <span className="logo-text">VICI</span>
+              <span className="logo-dot">.</span>
+              <span className="logo-ar">AR</span>
+            </Link>
+          </NavbarBrand>
 
-        {/* DESKTOP MENU */}
-        <NavbarContent className="hidden md:flex gap-4">
-          <NavbarItem>
-            <Link to="/" color="foreground">
+          {/* DESKTOP MENU */}
+          <NavbarContent className="hidden md:flex gap-4">
+            <NavbarItem>
+              <Link to="/">Inicio</Link>
+            </NavbarItem>
+
+            <NavbarItem>
+              <Link to="/">About us</Link>
+            </NavbarItem>
+
+            <NavbarItem>
+              <button
+                onClick={() => setIsRegisterOpen(true)}
+                
+              >
+                Registro
+              </button>
+            </NavbarItem>
+          </NavbarContent>
+        </NavbarContent>
+
+        {/* RIGHT */}
+        <NavbarContent justify="end" className="gap-3">
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <button className="flex items-center justify-center">
+                <UserCircleIcon className="h-8 w-8 text-secondary hover:scale-105 transition-transform" />
+              </button>
+            </DropdownTrigger>
+
+            <DropdownMenu variant="flat">
+              <DropdownItem key="login">
+                <Link to="/login">Login</Link>
+              </DropdownItem>
+
+              <DropdownItem key="signup">
+                <button
+                  onClick={() => setIsRegisterOpen(true)}
+                  className="w-full text-left"
+                >
+                  Sign up
+                </button>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarContent>
+
+        {/* MOBILE MENU */}
+        <NavbarMenu>
+          <NavbarMenuItem>
+            <Link
+              className="w-full"
+              to="/"
+              onClick={() => setIsMenuOpen(false)}
+            >
               Inicio
             </Link>
-          </NavbarItem>
+          </NavbarMenuItem>
 
-          <NavbarItem isActive>
-            <Link aria-current="page" color="secondary" to="/">
-              About is
+          <NavbarMenuItem>
+            <Link
+              className="w-full"
+              to="/"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              About us
             </Link>
-          </NavbarItem>
+          </NavbarMenuItem>
 
-          <NavbarItem>
-            <Link color="foreground" to="/register">
+          <NavbarMenuItem>
+            <button
+              className="w-full text-left"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsRegisterOpen(true);
+              }}
+            >
               Registro
-            </Link>
-          </NavbarItem>
-        </NavbarContent>
-      </NavbarContent>
-
-      {/* RIGHT */}
-      <NavbarContent justify="end" className="gap-3">
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <button className="flex items-center justify-center">
-              <UserCircleIcon className="h-8 w-8 text-secondary hover:scale-105 transition-transform" />
             </button>
-          </DropdownTrigger>
+          </NavbarMenuItem>
+        </NavbarMenu>
+      </Navbar>
 
-          <DropdownMenu variant="flat">
-            <DropdownItem key="login">
-              <Link to="/login">Login</Link>
-            </DropdownItem>
-
-            <DropdownItem key="signup">
-              <Link to="/register">Sign up</Link>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </NavbarContent>
-
-      {/* MOBILE MENU (NO TOCADO) */}
-      <NavbarMenu>
-        <NavbarMenuItem>
-          <Link
-            className="w-full"
-            color="foreground"
-            to="/"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Inicio
-          </Link>
-        </NavbarMenuItem>
-
-        <NavbarMenuItem>
-          <Link
-            className="w-full"
-            color="secondary"
-            to="/"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            About is
-          </Link>
-        </NavbarMenuItem>
-
-        <NavbarMenuItem>
-          <Link
-            className="w-full"
-            color="foreground"
-            to="/"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Registro
-          </Link>
-        </NavbarMenuItem>
-      </NavbarMenu>
-    </Navbar>
+      {/* MODAL */}
+      <RegisterModal
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+      />
+    </>
   );
 };
 
