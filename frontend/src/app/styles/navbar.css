@@ -1,5 +1,5 @@
 .logo-text {
-  color: #3498db;
+  color: var(--color-primary-light);
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -9,10 +9,12 @@
   color: #e74c3c;
   font-size: 1.1rem;
   font-weight: 800;
+  font-size: 1.1rem;
+  font-weight: 800;
 }
 
 .logo-ar {
-  color: #F6F4F0;
+  color: var(--color-primary);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -20,12 +22,17 @@
 
 
 .custom-navbar {
-  background-color: var(--navbar-bg);
-  border-bottom: 3px solid var(--navbar-border);
+  background-color: var(--color-background);
+  border-bottom: 3px solid var(--color-primary);
 }
 
 .logo-link{
+.logo-link{
   display: flex;
+  justify-content: center; 
+  align-items: center;  
+  justify-items: center;
+}
   justify-content: center; 
   align-items: center;  
   justify-items: center;

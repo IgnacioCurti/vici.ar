@@ -3,6 +3,18 @@
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  /* --color-primary: #1B262C; */
+  --color-primary: #3282B8;
+  --color-secondary: #496A7C;
+  --color-secondary-light: #ACE2FF;
+  --color-background: #1B262C;
+  --color-foreground: #F6F4F0;
+  --color-foreground-dark: #B3B3B3;
+
+  --font-sans: 'Sans', sans-serif;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -11,8 +23,7 @@
   --navbar-border: #3aa6ff;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--color-foreground);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,27 +31,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
   width: 100%;
-}
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  background-color: var(--color-background);
 }
 
-button:hover {
-  border-color: #646cff;
-}
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -54,5 +50,6 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
+
 
 }
