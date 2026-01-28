@@ -9,6 +9,8 @@
   color: #e74c3c;
   font-size: 1.1rem;
   font-weight: 800;
+  font-size: 1.1rem;
+  font-weight: 800;
 }
 
 .logo-ar {
@@ -25,7 +27,12 @@
 }
 
 .logo-link{
+.logo-link{
   display: flex;
+  justify-content: center; 
+  align-items: center;  
+  justify-items: center;
+}
   justify-content: center; 
   align-items: center;  
   justify-items: center;

@@ -19,6 +19,8 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  --navbar-bg: #020618;       
+  --navbar-border: #3aa6ff;
 
   color-scheme: light dark;
   color: var(--color-foreground);
@@ -48,5 +50,6 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
+
 
 }
