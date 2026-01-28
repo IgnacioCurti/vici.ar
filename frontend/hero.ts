@@ -11,6 +11,9 @@ export default heroui({
         secondary: {
           DEFAULT: "#496A7C",
           
+        },
+        background: {
+          DEFAULT: "#1B262C",
         }
       }
     }
