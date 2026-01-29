@@ -1,13 +1,13 @@
 .logo-text {
   color: var(--color-primary-light);
-  font-size: 1.1rem;
+  font-size: 1.0rem;
   font-weight: 800;
   letter-spacing: 0.05em;
 }
 
 .logo-dot {
   color: #e74c3c;
-  font-size: 1.1rem;
+  font-size: 1.0rem;
   font-weight: 800;
   font-size: 1.1rem;
   font-weight: 800;
@@ -15,7 +15,7 @@
 
 .logo-ar {
   color: var(--color-primary);
-  font-size: 1.1rem;
+  font-size: 1.0rem;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
@@ -26,13 +26,9 @@
   border-bottom: 3px solid var(--color-primary);
 }
 
-.logo-link{
+
 .logo-link{
   display: flex;
-  justify-content: center; 
-  align-items: center;  
-  justify-items: center;
-}
   justify-content: center; 
   align-items: center;  
   justify-items: center;
