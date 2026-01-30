@@ -8,7 +8,7 @@ export const authService = {
       username: data.username,
       password: data.password,
       ...(data.displayName && {displayName: data.displayName}),
-      ...(data.description && {displayName: data.description})
+      ...(data.description && {description: data.description})
     });
     return response.data;
   },
