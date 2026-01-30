@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { authService } from "../../../services/auth.service";
 import { Spinner } from "@heroui/react";
 import axios from "axios";
@@ -9,8 +9,11 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState<"verifying" | "success" | "error">("verifying");
   const [message, setMessage] = useState("Verificando tu email...");
+  const hasVerified = useRef(false);
 
   useEffect(() => {
+    if (hasVerified.current) return;
+
     const verifyEmail = async () => {
       const code = searchParams.get("code");
       const userIdParam = searchParams.get('userId');
@@ -29,6 +32,8 @@ const VerifyEmail = () => {
       }
 
       try {
+        hasVerified.current = true;
+
         await authService.verifyEmail(userId, code);
         setStatus("success");
         setMessage("Email verificado exitosamente");

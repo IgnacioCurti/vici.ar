@@ -12,8 +12,8 @@ const transporter = nodemailer.createTransport({
 });
 
 export class EmailService {
-  async sendVerificationEmail(email: string, code: string): Promise<void> {
-    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?code=${code}`;
+  async sendVerificationEmail(email: string, userId: number, code: string): Promise<void> {
+    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?userId=${userId}&code=${code}`;
 
     await transporter.sendMail({
       from: `"Vici.ar " <${process.env.SMTP_USER}>`,
