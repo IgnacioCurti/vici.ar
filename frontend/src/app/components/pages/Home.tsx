@@ -11,11 +11,11 @@ const Home = () => {
     <>
       <div className="buttons-container">
         <Link to="/login">
-          <Button color="primary">Iniciar sesión</Button>
+          <Button className="login-button" >Iniciar sesión</Button>
         </Link>
 
-        <Button
-          color="secondary"
+        <Button className="register-button"
+          
           onPress={() => setIsRegisterOpen(true)}
         >
           Registrarse
