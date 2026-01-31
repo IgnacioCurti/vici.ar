@@ -19,15 +19,6 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 import RegisterModal from "../auth/RegisterModal"; 
 
 /* =======================
-   Logo
-======================= */
-export const AcmeLogo: React.FC = () => {
-  return (
-    <img src={logo} alt="VICI.AR Logo" className="h-12 w-auto object-contain" />
-  );
-};
-
-/* =======================
    Navbar
 ======================= */
 const AppNavbar: React.FC = () => {
@@ -49,32 +40,11 @@ const AppNavbar: React.FC = () => {
 
           <NavbarBrand className="flex items-center gap-1">
             <Link to="/" className="logo-link">
-              <AcmeLogo />
               <span className="logo-text">VICI</span>
               <span className="logo-dot">.</span>
               <span className="logo-ar">AR</span>
             </Link>
           </NavbarBrand>
-
-          {/* DESKTOP MENU */}
-          <NavbarContent className="hidden md:flex gap-4">
-            <NavbarItem>
-              <Link to="/">Inicio</Link>
-            </NavbarItem>
-
-            <NavbarItem>
-              <Link to="/">About us</Link>
-            </NavbarItem>
-
-            <NavbarItem>
-              <button
-                onClick={() => setIsRegisterOpen(true)}
-                
-              >
-                Registro
-              </button>
-            </NavbarItem>
-          </NavbarContent>
         </NavbarContent>
 
         {/* RIGHT */}
@@ -102,41 +72,6 @@ const AppNavbar: React.FC = () => {
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>
-
-        {/* MOBILE MENU */}
-        <NavbarMenu>
-          <NavbarMenuItem>
-            <Link
-              className="w-full"
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Inicio
-            </Link>
-          </NavbarMenuItem>
-
-          <NavbarMenuItem>
-            <Link
-              className="w-full"
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About us
-            </Link>
-          </NavbarMenuItem>
-
-          <NavbarMenuItem>
-            <button
-              className="w-full text-left"
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsRegisterOpen(true);
-              }}
-            >
-              Registro
-            </button>
-          </NavbarMenuItem>
-        </NavbarMenu>
       </Navbar>
 
       {/* MODAL */}
