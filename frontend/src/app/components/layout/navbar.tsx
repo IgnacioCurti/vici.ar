@@ -30,7 +30,7 @@ const AppNavbar: React.FC = () => {
       <Navbar
         isBordered={false}
         maxWidth="full"
-        className="w-full custom-navbar"
+        className="w-full custom-navbar bg-[--color-background]"
         isMenuOpen={isMenuOpen}
         onMenuOpenChange={setIsMenuOpen}
       >

@@ -80,7 +80,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
           {/* CONTENEDOR 3D */}
           <div className='relative'>
             {/* sombra */}
-            <div className='absolute inset-0 translate-x-3 bg-primary translate-y-3 rounded-xl' />
+            <div className='absolute inset-0 translate-x-3 bg-background translate-y-3 rounded-xl' />
 
             {/* card */}
             <div className='relative z-10 w-full max-w-[520px] rounded-xl shadow-2xl p-8'>
@@ -213,14 +213,14 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                 />
 
                 {/* submit */}
-                <Button type='submit'  className='mt-2' isLoading={isLoading} isDisabled={isLoading}>
+                <Button type='submit'  className='mt-2 bg-primary' isLoading={isLoading} isDisabled={isLoading}>
                   {isLoading ? "Registrando..." : "Continuar"}
                 </Button>
 
                 {/* google */}
                 <Button
                   type='button'
-                  className='mt-3 text-white bg-secondary'
+                  className='mt-3 text-black bg-foreground-dark'
                   onPress={() => console.log("Registro con Google")}
                   isDisabled={isLoading}
                 >
