@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import logo from "../../../assets/Logo-removebg-preview.png";
 import "../../styles/navbar.css";
 import { Link } from "react-router-dom";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
   NavbarMenuToggle,
   Dropdown,
   DropdownTrigger,
