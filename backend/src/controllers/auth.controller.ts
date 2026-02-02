@@ -85,6 +85,9 @@ export class AuthController {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Error logging in";
+      if (message.includes('verify your email')) {
+        return res.status(403).json({ message, emailNotVerified: true });
+      }
       return this.httpResponse.Error(res, message);
     }
   }
