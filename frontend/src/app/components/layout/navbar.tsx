@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import logo from "../../../assets/Logo-removebg-preview.png";
 import "../../styles/navbar.css";
 import { Link } from "react-router-dom";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
   NavbarMenuToggle,
   Dropdown,
   DropdownTrigger,
@@ -17,15 +13,6 @@ import {
 } from "@heroui/react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import RegisterModal from "../auth/RegisterModal"; 
-
-/* =======================
-   Logo
-======================= */
-export const AcmeLogo: React.FC = () => {
-  return (
-    <img src={logo} alt="VICI.AR Logo" className="h-12 w-auto object-contain" />
-  );
-};
 
 /* =======================
    Navbar
@@ -39,7 +26,7 @@ const AppNavbar: React.FC = () => {
       <Navbar
         isBordered={false}
         maxWidth="full"
-        className="w-full custom-navbar"
+        className="w-full custom-navbar bg-[--color-background]"
         isMenuOpen={isMenuOpen}
         onMenuOpenChange={setIsMenuOpen}
       >
@@ -49,32 +36,11 @@ const AppNavbar: React.FC = () => {
 
           <NavbarBrand className="flex items-center gap-1">
             <Link to="/" className="logo-link">
-              <AcmeLogo />
               <span className="logo-text">VICI</span>
               <span className="logo-dot">.</span>
               <span className="logo-ar">AR</span>
             </Link>
           </NavbarBrand>
-
-          {/* DESKTOP MENU */}
-          <NavbarContent className="hidden md:flex gap-4">
-            <NavbarItem>
-              <Link to="/">Inicio</Link>
-            </NavbarItem>
-
-            <NavbarItem>
-              <Link to="/">About us</Link>
-            </NavbarItem>
-
-            <NavbarItem>
-              <button
-                onClick={() => setIsRegisterOpen(true)}
-                
-              >
-                Registro
-              </button>
-            </NavbarItem>
-          </NavbarContent>
         </NavbarContent>
 
         {/* RIGHT */}
@@ -102,41 +68,6 @@ const AppNavbar: React.FC = () => {
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>
-
-        {/* MOBILE MENU */}
-        <NavbarMenu>
-          <NavbarMenuItem>
-            <Link
-              className="w-full"
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Inicio
-            </Link>
-          </NavbarMenuItem>
-
-          <NavbarMenuItem>
-            <Link
-              className="w-full"
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About us
-            </Link>
-          </NavbarMenuItem>
-
-          <NavbarMenuItem>
-            <button
-              className="w-full text-left"
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsRegisterOpen(true);
-              }}
-            >
-              Registro
-            </button>
-          </NavbarMenuItem>
-        </NavbarMenu>
       </Navbar>
 
       {/* MODAL */}
