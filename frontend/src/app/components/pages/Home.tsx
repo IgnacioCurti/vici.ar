@@ -1,32 +1,27 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@heroui/react";
 import RegisterModal from "../auth/RegisterModal";
 import "../../styles/homeStyles.css";
+import LoginModal from "../auth/LoginModal";
 
 const Home = () => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   return (
     <>
-      <div className="buttons-container">
-        <Link to="/login">
-          <Button className="login-button" >Iniciar sesión</Button>
-        </Link>
+      <div className='buttons-container'>
+        <Button color='primary' onPress={() => setIsLoginOpen(true)}>
+          Iniciar sesión
+        </Button>
 
-        <Button className="register-button"
-          
-          onPress={() => setIsRegisterOpen(true)}
-        >
+        <Button color='secondary' onPress={() => setIsRegisterOpen(true)}>
           Registrarse
         </Button>
       </div>
 
-      {/* MODAL */}
-      <RegisterModal
-        isOpen={isRegisterOpen}
-        onClose={() => setIsRegisterOpen(false)}
-      />
+      <RegisterModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </>
   );
 };
