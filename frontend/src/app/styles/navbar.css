@@ -22,7 +22,6 @@
 
 
 .custom-navbar {
-  background-color: var(--color-background);
   border-bottom: 3px solid var(--color-primary);
 }
 

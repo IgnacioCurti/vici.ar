@@ -5,3 +5,12 @@
   margin-top: 500px;
   gap: 1rem;
 }
+
+.login-button{
+  background: #dfdfe0;
+  color: black;
+}
+.register-button{
+  background: #3498db;
+  color: white;
+}
