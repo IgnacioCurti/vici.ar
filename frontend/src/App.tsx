@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import AppNavbar from "./app/components/layout/navbar";
 import Home from "./app/components/pages/Home";
 import VerifyEmail from "./app/components/auth/VerifyEmail";
-// import Login from "./app/pages/Login";
+import Profile from "./app/components/pages/Profile";
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
-        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
