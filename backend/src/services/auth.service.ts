@@ -27,7 +27,9 @@ export class AuthService {
         email: dto.email,
         username: dto.username,
         password: hashedPassword,
-        verification_code: verification_code
+        verification_code: verification_code,
+        displayname: dto.displayName ?? null,
+        description: dto.description ?? null
       },
     });
 

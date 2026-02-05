@@ -8,7 +8,7 @@ export class AuthController {
 
   async register(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, username, password } = req.body;
+      const { email, username, password, displayName, description } = req.body;
 
       if (!email || !username || !password) {
         return res.status(400).json({ message: "All fields are required" });
@@ -32,6 +32,8 @@ export class AuthController {
         email,
         username,
         password,
+        displayName,
+        description,
       });
 
       return res.status(201).json({ message: "User created", token, user: userResponse, });
