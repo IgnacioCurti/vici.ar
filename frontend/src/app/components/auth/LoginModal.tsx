@@ -1,9 +1,20 @@
 import type React from "react";
-import { useAuth } from "../../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Button, Form, Input, Modal, ModalBody, ModalContent } from "@heroui/react";
+
+import { useAuth } from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
+
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+} from "@heroui/react";
+
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import logo from "../../../assets/Logo-removebg-preview.png";
 
@@ -29,17 +40,31 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     const password = formData.password as string;
 
     try {
-      await login({
+      await login({ email, password });
+
+      const profile = {
+        username: email.split("@")[0],
+        displayName: email.split("@")[0],
         email,
-        password,
+        description: "",
+      };
+
+      localStorage.setItem("profile", JSON.stringify(profile));
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenido a VICI.AR",
+        text: "Inicio de sesión exitoso",
+        timer: 2000,
+        showConfirmButton: false,
       });
 
       onClose();
       navigate("/");
-    } catch (error) {
-      let errorMessage = "Error al iniciar sesion";
-      if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.message || errorMessage;
+    } catch (err) {
+      let errorMessage = "Error al iniciar sesión";
+
+      if (axios.isAxiosError(err)) {
+        errorMessage = err.response?.data?.message || errorMessage;
       }
 
       setError(errorMessage);
@@ -49,39 +74,52 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} hideCloseButton backdrop='blur' placement='center'>
-      <ModalContent className='bg-background relative z-10 w-full max-w-112.5 rounded-xl shadow-2xl p-8'>
-        <ModalBody className='flex justify-center'>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      hideCloseButton
+      backdrop="blur"
+      placement="center"
+    >
+      <ModalContent className="bg-background relative z-10 w-full max-w-112.5 rounded-xl shadow-2xl p-8">
+        <ModalBody className="flex justify-center">
+          {/* Botón cerrar */}
           <button
-            type='button'
+            type="button"
             onClick={onClose}
-            className='absolute top-6 right-6 text-[--color-foreground]/70 hover:text-[--color-foreground] transition z-10'
-            aria-label='Cerrar'>
-            <XMarkIcon className='h-6 w-6' />
+            className="absolute top-6 right-6 text-[--color-foreground]/70 hover:text-[--color-foreground] transition z-10"
+            aria-label="Cerrar"
+          >
+            <XMarkIcon className="h-6 w-6" />
           </button>
 
-          <div className='flex justify-center mb-2'>
-            <img src={logo} alt='VICI.AR' className='h-12 object-contain' />
+          {/* Logo */}
+          <div className="flex justify-center mb-2">
+            <img src={logo} alt="VICI.AR" className="h-12 object-contain" />
           </div>
 
-          <h2 className='text-foreground text-2xl font-semibold text-center mb-6'>Iniciar sesión</h2>
+          <h2 className="text-foreground text-2xl font-semibold text-center mb-6">
+            Iniciar sesión
+          </h2>
 
+          {/* Error */}
           {error && (
-            <div className='bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded-lg text-sm mb-6'>
+            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded-lg text-sm mb-6">
               {error}
             </div>
           )}
 
-          <Form className='flex flex-col gap-6 relative' onSubmit={handleSubmit}>
+          {/* Form */}
+          <Form className="flex flex-col gap-6" onSubmit={handleSubmit}>
             <Input
               isRequired
-              type='email'
-              name='email'
-              label='Email'
-              labelPlacement='outside'
-              placeholder='tu@email.com'
-              errorMessage='Por favor ingresa un email válido'
+              type="email"
+              name="email"
+              label="Email"
+              labelPlacement="outside"
+              placeholder="tu@email.com"
               isDisabled={isLoading}
+              errorMessage="Por favor ingresá un email válido"
               classNames={{
                 label: "text-foreground text-sm mb-1",
                 inputWrapper: "bg-white",
@@ -91,13 +129,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
             <Input
               isRequired
-              type='password'
-              name='password'
-              label='Contraseña'
-              labelPlacement='outside'
-              placeholder='Tu contraseña'
-              errorMessage='Por favor ingresa tu contraseña'
+              type="password"
+              name="password"
+              label="Contraseña"
+              labelPlacement="outside"
+              placeholder="Tu contraseña"
               isDisabled={isLoading}
+              errorMessage="Por favor ingresá tu contraseña"
               classNames={{
                 label: "text-foreground text-sm mb-1",
                 inputWrapper: "bg-white",
@@ -106,30 +144,32 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             />
 
             <Button
-              type='submit'
-              color='primary'
-              className='mt-2'
+              type="submit"
+              color="primary"
               fullWidth
               isLoading={isLoading}
-              isDisabled={isLoading}>
+              isDisabled={isLoading}
+            >
               {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
 
             <Button
-              type='button'
-              color='secondary'
+              type="button"
+              color="secondary"
               fullWidth
+              isDisabled={isLoading}
               onPress={() => console.log("Login con Google")}
-              isDisabled={isLoading}>
+            >
               Continuar con Google
             </Button>
 
-            <div className='text-center'>
+            <div className="text-center">
               <button
-                type='button'
+                type="button"
+                disabled={isLoading}
                 onClick={() => console.log("Olvidé mi contraseña")}
-                className='text-sm text-[--color-primary-light] hover:underline'
-                disabled={isLoading}>
+                className="text-sm text-[--color-primary-light] hover:underline"
+              >
                 ¿Olvidaste tu contraseña?
               </button>
             </div>

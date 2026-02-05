@@ -1,37 +1,57 @@
 import React, { useState } from "react";
 import logo from "../../../assets/Logo-removebg-preview.png";
-import { Modal, ModalContent, ModalBody, Button, Input, Textarea } from "@heroui/react";
+import {
+  Modal,
+  ModalContent,
+  ModalBody,
+  Button,
+  Input,
+  Textarea,
+} from "@heroui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 type RegisterModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
+/* =======================
+   Estado inicial del form
+======================= */
+const initialFormData = {
+  username: "",
+  displayName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  description: "",
+};
+
 const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    username: "",
-    displayName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    description: "",
-  });
-
+  const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
     setError("");
+  };
+
+  const handleClose = () => {
+    setFormData(initialFormData);
+    setError("");
+    onClose();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,9 +63,13 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
       return;
     }
 
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    const passwordPattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
     if (!passwordPattern.test(formData.password)) {
-      setError("La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial");
+      setError(
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial"
+      );
       return;
     }
 
@@ -60,13 +84,22 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
         description: formData.description || undefined,
       });
 
+   Swal.fire({
+          icon: "success",
+          title: "Enhorabuena",
+          text: "Registro exitoso",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      setFormData(initialFormData);
+      setError("");
+
       alert("Registro exitoso! Por favor verifica tu email");
-      onClose();
+      handleClose();
       navigate("/");
     } catch (err) {
-      const errorMessage = err instanceof Error
-        ? err.message
-        : "Error al registrar usuario";
+      const errorMessage =
+        err instanceof Error ? err.message : "Error al registrar usuario";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -74,49 +107,54 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} hideCloseButton backdrop='blur' placement='center'>
-      <ModalContent className='bg-transparent shadow-none'>
-        <ModalBody className='flex justify-center py-10'>
-          {/* CONTENEDOR 3D */}
-          <div className='relative'>
-            {/* sombra */}
-            <div className='absolute inset-0 translate-x-3 bg-background translate-y-3 rounded-xl' />
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      hideCloseButton
+      backdrop="blur"
+      placement="center"
+    >
+      <ModalContent className="bg-transparent shadow-none">
+        <ModalBody className="flex justify-center py-10">
+          <div className="relative">
+            <div className="absolute inset-0 translate-x-3 translate-y-3 bg-background rounded-xl" />
 
-            {/* card */}
-            <div className='relative z-10 w-full max-w-[520px] rounded-xl shadow-2xl p-8'>
-              <form className='flex flex-col gap-3 relative' onSubmit={handleSubmit}>
-                {/* BOTÓN CERRAR */}
+            <div className="relative z-10 w-full max-w-[520px] rounded-xl shadow-2xl p-8">
+              <form className="flex flex-col gap-3 relative" onSubmit={handleSubmit}>
+                {/* cerrar */}
                 <button
-                  type='button'
-                  onClick={onClose}
-                  className='absolute top-0 right-0 text-white/70 hover:text-white transition'
-                  aria-label='Cerrar'>
-                  <XMarkIcon className='h-5 w-5' />
+                  type="button"
+                  onClick={handleClose}
+                  className="absolute top-0 right-0 text-white/70 hover:text-white transition"
+                  aria-label="Cerrar"
+                >
+                  <XMarkIcon className="h-5 w-5" />
                 </button>
 
-                {/* LOGO */}
-                <div className='flex justify-center'>
-                  <img src={logo} alt='VICI.AR' className='h-12 object-contain' />
+                {/* logo */}
+                <div className="flex justify-center">
+                  <img src={logo} alt="VICI.AR" className="h-12 object-contain" />
                 </div>
 
-                <h2 className='text-white text-2xl font-semibold text-center mb-2'>Crear cuenta</h2>
+                <h2 className="text-white text-2xl font-semibold text-center mb-2">
+                  Crear cuenta
+                </h2>
 
                 {error && (
-                  <div className='bg-red-500/100 border border-red-500 px-4 py-2 rounded-lg text-sm text-black'>
+                  <div className="bg-red-500 border border-red-500 px-4 py-2 rounded-lg text-sm text-black">
                     {error}
                   </div>
                 )}
 
-                <div className='flex gap-4'>
+                <div className="flex gap-4">
                   <Input
-                    name='username'
+                    name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    label='Username'
-                    labelPlacement='outside'
-                    placeholder='Username *'
+                    label="Username"
+                    labelPlacement="outside"
+                    placeholder="Username *"
                     required
-                    variant='flat'
                     classNames={{
                       label: "text-white text-sm",
                       inputWrapper: "bg-white",
@@ -125,13 +163,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                   />
 
                   <Input
-                    name='displayName'
+                    name="displayName"
                     value={formData.displayName}
                     onChange={handleChange}
-                    label='Nombre visible'
-                    labelPlacement='outside'
-                    placeholder='Nombre visible'
-                    variant='flat'
+                    label="Nombre visible"
+                    labelPlacement="outside"
+                    placeholder="Nombre visible"
                     classNames={{
                       label: "text-white text-sm",
                       inputWrapper: "bg-white",
@@ -140,17 +177,15 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                   />
                 </div>
 
-                {/* Email */}
                 <Input
-                  name='email'
+                  name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  type='email'
-                  label='Email'
-                  labelPlacement='outside'
-                  placeholder='Email *'
+                  type="email"
+                  label="Email"
+                  labelPlacement="outside"
+                  placeholder="Email *"
                   required
-                  variant='flat'
                   classNames={{
                     label: "text-white text-sm",
                     inputWrapper: "bg-white",
@@ -158,18 +193,16 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                   }}
                 />
 
-                {/* Passwords */}
-                <div className='flex gap-4'>
+                <div className="flex gap-4">
                   <Input
-                    type='password'
-                    name='password'
+                    type="password"
+                    name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    label='Contraseña'
-                    labelPlacement='outside'
-                    placeholder='Contraseña *'
+                    label="Contraseña"
+                    labelPlacement="outside"
+                    placeholder="Contraseña *"
                     required
-                    variant='flat'
                     classNames={{
                       label: "text-white text-sm",
                       inputWrapper: "bg-white",
@@ -178,15 +211,14 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                   />
 
                   <Input
-                    name='confirmPassword'
+                    type="password"
+                    name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    type='password'
-                    label='Repetir contraseña'
-                    labelPlacement='outside'
-                    placeholder='Repetir contraseña *'
+                    label="Repetir contraseña"
+                    labelPlacement="outside"
+                    placeholder="Repetir contraseña *"
                     required
-                    variant='flat'
                     classNames={{
                       label: "text-white text-sm",
                       inputWrapper: "bg-white",
@@ -195,16 +227,14 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                   />
                 </div>
 
-                {/* Description */}
                 <Textarea
-                  name='description'
+                  name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  label='Descripción'
-                  labelPlacement='outside'
-                  placeholder='Descripción (opcional)'
+                  label="Descripción"
+                  labelPlacement="outside"
+                  placeholder="Descripción (opcional)"
                   minRows={2}
-                  variant='flat'
                   classNames={{
                     label: "text-white text-sm",
                     inputWrapper: "bg-white",
@@ -212,15 +242,18 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                   }}
                 />
 
-                {/* submit */}
-                <Button type='submit'  className='mt-2 bg-primary' isLoading={isLoading} isDisabled={isLoading}>
+                <Button
+                  type="submit"
+                  className="mt-2 bg-primary"
+                  isLoading={isLoading}
+                  isDisabled={isLoading}
+                >
                   {isLoading ? "Registrando..." : "Continuar"}
                 </Button>
 
-                {/* google */}
                 <Button
-                  type='button'
-                  className='mt-3 text-black bg-foreground-dark'
+                  type="button"
+                  className="mt-3 text-black bg-foreground-dark"
                   onPress={() => console.log("Registro con Google")}
                   isDisabled={isLoading}
                 >
