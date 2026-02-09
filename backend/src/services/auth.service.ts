@@ -33,7 +33,7 @@ export class AuthService {
       },
     });
 
-    await emailService.sendVerificationEmail(user.email, Number(user.user_id), verification_code);
+    emailService.sendVerificationEmail(user.email, Number(user.user_id), verification_code);
 
     const token = generateToken({
       userId: Number(user.user_id),
