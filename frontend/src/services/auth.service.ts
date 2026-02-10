@@ -7,7 +7,7 @@ export const authService = {
       email: data.email,
       username: data.username,
       password: data.password,
-      ...(data.displayName && {displayName: data.displayName}),
+      ...(data.displayname && {displayName: data.displayname}),
       ...(data.description && {description: data.description})
     });
     return response.data;
