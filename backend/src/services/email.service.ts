@@ -1,58 +1,54 @@
-import nodemailer from 'nodemailer';
+import { google } from "googleapis";
 import { verificationEmailTemplate } from '../utils/verificationEmailTemplate.js';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
-  }
-});
+const OAuth2 = google.auth.OAuth2;
 
 export class EmailService {
-  async sendVerificationEmail(email: string, userId: number, code: string): Promise<void> {
-    console.log('📧 === INICIO ENVÍO EMAIL ===');
-    console.log('Destinatario:', email);
-    console.log('User ID:', userId);
-    console.log('Código:', code);
-    console.log('SMTP Config:', {
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      user: process.env.SMTP_USER,
-      hasPassword: !!process.env.SMTP_PASS
+  private gmail;
+
+  constructor() {
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET
+    );
+
+    oauth2Client.setCredentials({
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN || null,
     });
 
-    try {
-      // Verificar conexión SMTP primero
-      await transporter.verify();
-      console.log('✅ Conexión SMTP verificada');
+    this.gmail = google.gmail({
+      version: 'v1',
+      auth: oauth2Client,
+    });
+  }
 
-      const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?userId=${userId}&code=${code}`;
-      console.log('URL de verificación:', verificationUrl);
+  async sendVerificationEmail(email: string, userId: number, code: string): Promise<void> {
+    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?userId=${userId}&code=${code}`;
+    const message = [
+      `From: "VICI.AR" <${process.env.GMAIL_USER}>`,
+      `To: ${email}`,
+      "Subject: Email Verification - VICI.AR",
+      "MIME-Version: 1.0",
+      "Content-Type: text/html; charset=utf-8",
+      "",
+      verificationEmailTemplate(code, verificationUrl),
+    ].join("\n");
 
-      const info = await transporter.sendMail({
-        from: `"Vici.ar" <${process.env.SMTP_USER}>`,
-        to: email,
-        subject: "Email verification",
-        html: verificationEmailTemplate(code, verificationUrl),
-      });
+    const encodedMessage = Buffer
+      .from(message)
+      .toString("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
 
-      console.log('✅ Email enviado exitosamente');
-      console.log('Message ID:', info.messageId);
-      console.log('Response:', info.response);
-      console.log('📧 === FIN ENVÍO EMAIL ===');
-
-    } catch (error) {
-      console.error('❌ Error enviando email:', error);
-      console.error('Error details:', JSON.stringify(error, null, 2));
-      throw error;
-    }
+    await this.gmail.users.messages.send({
+      userId: 'me',
+      requestBody: {
+        raw: encodedMessage,
+      },
+    });
+    console.log("✅ Email enviado con Gmail API");
   }
 }
 
-export default new EmailService();
+export default new EmailService;
