@@ -34,7 +34,7 @@ const Profile = () => {
           <CardBody className='pt-20 pb-6 px-6 text-center'>
             <h2 className='text-2xl font-bold mb-1 text-black'>{user.username}</h2>
 
-            {user.displayName && <p className='text-gray-600 mb-4'>{user.displayName}</p>}
+            {user.displayname && <p className='text-gray-600 mb-4'>{user.displayname}</p>}
 
             {user.description && <p className='text-sm text-gray-500 mb-6 px-4'>{user.description}</p>}
 

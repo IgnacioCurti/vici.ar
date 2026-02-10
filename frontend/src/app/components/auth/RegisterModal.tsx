@@ -80,7 +80,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
         username: formData.username,
         email: formData.email,
         password: formData.password,
-        displayName: formData.displayName || undefined,
+        displayname: formData.displayName || undefined,
         description: formData.description || undefined,
       });
 
@@ -235,6 +235,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                   labelPlacement="outside"
                   placeholder="Descripción (opcional)"
                   minRows={2}
+                  maxLength={50}
                   classNames={{
                     label: "text-white text-sm",
                     inputWrapper: "bg-white",
