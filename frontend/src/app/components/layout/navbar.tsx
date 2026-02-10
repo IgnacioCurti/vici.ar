@@ -80,7 +80,7 @@ const AppNavbar: React.FC = () => {
 
         {/* RIGHT */}
         <NavbarContent justify="end" className="gap-3">
-          <Dropdown placement="bottom-end">
+          <Dropdown placement="bottom-end" className="text-black">
             <DropdownTrigger>
               <button className="flex items-center justify-center">
                 <UserCircleIcon className="h-8 w-8 text-secondary hover:scale-105 transition-transform" />
