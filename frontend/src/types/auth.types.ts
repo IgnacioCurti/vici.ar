@@ -2,7 +2,7 @@ export interface RegisterData {
   email: string;
   username: string;
   password: string;
-  displayName?: string;
+  displayname?: string;
   description?: string;
 }
 
@@ -15,7 +15,7 @@ export interface User {
   id: number;
   email: string;
   username: string;
-  displayName?: string;
+  displayname?: string;
   description?: string;
   emailVerified: boolean;
 }
