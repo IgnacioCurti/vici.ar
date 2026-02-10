@@ -33,7 +33,10 @@ export class AuthService {
       },
     });
 
-    emailService.sendVerificationEmail(user.email, Number(user.user_id), verification_code);
+    emailService.sendVerificationEmail(user.email, Number(user.user_id), verification_code)
+      .catch(error => {console.error('❌ Error enviando email de verificación:', error);
+        
+      });
 
     const token = generateToken({
       userId: Number(user.user_id),
