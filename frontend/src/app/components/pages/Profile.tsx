@@ -34,7 +34,7 @@ const Profile = () => {
     if (!file) return;
 
     setSelectedFile(file);
-
+    console.log(selectedFile)
 
     const reader = new FileReader();
     reader.onloadend = () => {
