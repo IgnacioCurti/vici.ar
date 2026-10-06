@@ -1,0 +1,26 @@
+# Environment files and local overrides
+.env
+.env.*
+!.env.example
+*.local
+
+# Dependencies and generated output
+node_modules/
+dist/
+dist-ssr/
+coverage/
+
+# Deployment and tool state
+.vercel/
+.cache/
+.turbo/
+
+# Local editor and operating-system files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.swp
+*.swo
