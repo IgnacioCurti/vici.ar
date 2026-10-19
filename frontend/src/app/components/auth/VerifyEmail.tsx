@@ -37,8 +37,11 @@ const VerifyEmail = () => {
 
         await authService.verifyEmail(userId, code);
         setStatus("success");
-        setMessage("Email verificado exitosamente");
-        redirectTimeout = setTimeout(() => navigate("/login"), 2000);
+        setMessage("Email verificado exitosamente. Ya podés iniciar sesión.");
+        redirectTimeout = setTimeout(
+          () => navigate("/", { state: { openLogin: true } }),
+          2000,
+        );
       } catch (error) {
         setStatus("error");
 
@@ -73,7 +76,7 @@ const VerifyEmail = () => {
             <div className="text-green-500 text-6xl mb-4">✓</div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">¡Verificado!</h2>
             <p className="text-gray-600">{message}</p>
-            <p className="text-sm text-gray-500 mt-4">Redirigiendo...</p>
+            <p className="text-sm text-gray-500 mt-4">Abriendo el inicio de sesión...</p>
           </>
         )}
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@heroui/react";
+import { useLocation, useNavigate } from "react-router-dom";
 import RegisterModal from "../auth/RegisterModal";
 import "../../styles/homeStyles.css";
 import LoginModal from "../auth/LoginModal";
@@ -7,6 +8,16 @@ import LoginModal from "../auth/LoginModal";
 const Home = () => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const shouldOpenLogin = isLoginOpen || location.state?.openLogin === true;
+
+  const handleCloseLogin = () => {
+    setIsLoginOpen(false);
+    if (location.state?.openLogin) {
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  };
 
   return (
     <>
@@ -21,7 +32,7 @@ const Home = () => {
       </div>
 
       <RegisterModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginModal isOpen={shouldOpenLogin} onClose={handleCloseLogin} />
     </>
   );
 };
