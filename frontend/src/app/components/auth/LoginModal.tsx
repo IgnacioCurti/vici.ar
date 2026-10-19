@@ -17,16 +17,14 @@ type LoginModalProps = {
 };
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const { login } = useAuth();
+  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    setIsLoading(true);
 
     const formData = Object.fromEntries(new FormData(e.currentTarget));
     const email = formData.email as string;
@@ -61,8 +59,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       }
 
       setError(errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -88,7 +84,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
           {/* Error */}
           {error && (
-            <div className='bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded-lg text-sm mb-6'>
+            <div role='alert' className='bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded-lg text-sm mb-6'>
               {error}
             </div>
           )}

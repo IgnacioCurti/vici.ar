@@ -5,6 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 type RegisterModalProps = {
   isOpen: boolean;
@@ -24,12 +25,11 @@ const initialFormData = {
 };
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
-  const { register } = useAuth();
+  const { register, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -61,8 +61,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
       return;
     }
 
-    setIsLoading(true);
-
     try {
       await register({
         username: formData.username,
@@ -75,21 +73,22 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
       Swal.fire({
         icon: "success",
         title: "Enhorabuena",
-        text: "Registro exitoso",
+        text: "Registro exitoso. Revisá tu email para verificar la cuenta.",
         timer: 2000,
         showConfirmButton: false,
       });
       setFormData(initialFormData);
       setError("");
 
-      alert("Registro exitoso! Por favor verifica tu email");
       handleClose();
       navigate("/");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Error al registrar usuario";
+      const errorMessage = axios.isAxiosError(err)
+        ? err.response?.data?.message || "Error al registrar usuario"
+        : err instanceof Error
+          ? err.message
+          : "Error al registrar usuario";
       setError(errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -114,7 +113,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
           <h2 className='text-white text-2xl font-semibold text-center mb-2'>Crear cuenta</h2>
 
           {error && (
-            <div className='bg-red-500 border border-red-500 px-4 py-2 rounded-lg text-sm text-black'>{error}</div>
+            <div role='alert' className='bg-red-500 border border-red-500 px-4 py-2 rounded-lg text-sm text-black'>{error}</div>
           )}
 
           <Form className='flex flex-col gap-6' onSubmit={handleSubmit}>
@@ -123,6 +122,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                 name='username'
                 value={formData.username}
                 onChange={handleChange}
+                isDisabled={isLoading}
                 label='Username'
                 labelPlacement='outside'
                 placeholder='Username'
@@ -138,6 +138,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                 name='displayName'
                 value={formData.displayName}
                 onChange={handleChange}
+                isDisabled={isLoading}
                 label='Nombre visible'
                 labelPlacement='outside'
                 placeholder='Nombre visible'
@@ -153,6 +154,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
               name='email'
               value={formData.email}
               onChange={handleChange}
+              isDisabled={isLoading}
               type='email'
               label='Email'
               labelPlacement='outside'
@@ -170,6 +172,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
               name='password'
               value={formData.password}
               onChange={handleChange}
+              isDisabled={isLoading}
               label='Contraseña'
               labelPlacement='outside'
               placeholder='Contraseña'
@@ -186,6 +189,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
               name='confirmPassword'
               value={formData.confirmPassword}
               onChange={handleChange}
+              isDisabled={isLoading}
               label='Repetir contraseña'
               labelPlacement='outside'
               placeholder='Repetir contraseña'

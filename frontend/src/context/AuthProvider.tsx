@@ -34,19 +34,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const register = async (data: RegisterData) => {
     setIsLoading(true);
-    const response = await authService.register(data);
-    setToken(response.token);
-    setUser(response.user);
-    localStorage.setItem("token", response.token);
-    localStorage.setItem("user", JSON.stringify(response.user));
+    try {
+      const response = await authService.register(data);
+      setToken(response.token);
+      setUser(response.user);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const login = async (data: LoginData) => {
-    const response = await authService.login(data);
-    setToken(response.token);
-    setUser(response.user);
-    localStorage.setItem("token", response.token);
-    localStorage.setItem("user", JSON.stringify(response.user));
+    setIsLoading(true);
+    try {
+      const response = await authService.login(data);
+      setToken(response.token);
+      setUser(response.user);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = () => {

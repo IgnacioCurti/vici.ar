@@ -13,6 +13,7 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     if (hasVerified.current) return;
+    let redirectTimeout: ReturnType<typeof setTimeout> | undefined;
 
     const verifyEmail = async () => {
       const code = searchParams.get("code");
@@ -37,7 +38,7 @@ const VerifyEmail = () => {
         await authService.verifyEmail(userId, code);
         setStatus("success");
         setMessage("Email verificado exitosamente");
-        setTimeout(() => navigate("/login"), 2000);
+        redirectTimeout = setTimeout(() => navigate("/login"), 2000);
       } catch (error) {
         setStatus("error");
 
@@ -51,6 +52,9 @@ const VerifyEmail = () => {
     };
 
     verifyEmail();
+    return () => {
+      if (redirectTimeout) clearTimeout(redirectTimeout);
+    };
   }, [searchParams, navigate]);
 
   return (
