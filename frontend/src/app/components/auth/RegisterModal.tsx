@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import logo from "../../../assets/Logo-removebg-preview.png";
-import { Modal, ModalContent, ModalBody, Button, Input, Form } from "@heroui/react";
+import {
+  Modal,
+  ModalContent,
+  ModalBody,
+  Button,
+  Input,
+  Form,
+} from "@heroui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +38,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -57,7 +66,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
     if (!passwordPattern.test(formData.password)) {
-      setError("La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial");
+      setError(
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial",
+      );
       return;
     }
 
@@ -72,21 +83,21 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
         description: formData.description || undefined,
       });
 
-      Swal.fire({
+      await Swal.fire({
         icon: "success",
-        title: "Enhorabuena",
-        text: "Registro exitoso",
-        timer: 2000,
-        showConfirmButton: false,
+        title: "Registro exitoso",
+        text: "Te enviamos un email de verificación. Por favor verificá tu correo antes de iniciar sesión.",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#6366f1",
       });
+
       setFormData(initialFormData);
       setError("");
-
-      alert("Registro exitoso! Por favor verifica tu email");
       handleClose();
       navigate("/");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Error al registrar usuario";
+      const errorMessage =
+        err instanceof Error ? err.message : "Error al registrar usuario";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -94,38 +105,49 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} hideCloseButton backdrop='blur' placement='center'>
-      <ModalContent className='bg-background relative z-10 w-full max-w-112.5 rounded-xl shadow-2xl p-8'>
-        <ModalBody className='flex justify-center'>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      hideCloseButton
+      backdrop="blur"
+      placement="center"
+    >
+      <ModalContent className="bg-background relative z-10 w-full max-w-112.5 rounded-xl shadow-2xl p-8">
+        <ModalBody className="flex justify-center">
           {/* cerrar */}
           <button
-            type='button'
+            type="button"
             onClick={handleClose}
-            className='absolute top-6 right-6 text-[--color-foreground]/70 hover:text-[--color-foreground] transition z-10'
-            aria-label='Cerrar'>
-            <XMarkIcon className='h-6 w-6' />
+            className="absolute top-6 right-6 text-[--color-foreground]/70 hover:text-[--color-foreground] transition z-10"
+            aria-label="Cerrar"
+          >
+            <XMarkIcon className="h-6 w-6" />
           </button>
 
           {/* logo */}
-          <div className='flex justify-center'>
-            <img src={logo} alt='VICI.AR' className='h-12 object-contain' />
+          <div className="flex justify-center">
+            <img src={logo} alt="VICI.AR" className="h-12 object-contain" />
           </div>
 
-          <h2 className='text-white text-2xl font-semibold text-center mb-2'>Crear cuenta</h2>
+          <h2 className="text-white text-2xl font-semibold text-center mb-2">
+            Crear cuenta
+          </h2>
 
           {error && (
-            <div className='bg-red-500 border border-red-500 px-4 py-2 rounded-lg text-sm text-black'>{error}</div>
+            <div className="bg-red-500 border border-red-500 px-4 py-2 rounded-lg text-sm text-black">
+              {error}
+            </div>
           )}
 
-          <Form className='flex flex-col gap-6' onSubmit={handleSubmit}>
-            <div className='flex gap-4'>
+          <Form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+            <div className="flex gap-4">
               <Input
-                name='username'
+                name="username"
                 value={formData.username}
                 onChange={handleChange}
-                label='Username'
-                labelPlacement='outside'
-                placeholder='Username'
+                label="Username"
+                labelPlacement="outside"
+                placeholder="Username"
                 isRequired
                 classNames={{
                   label: "text-white text-sm",
@@ -135,12 +157,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
               />
 
               <Input
-                name='displayName'
+                name="displayName"
                 value={formData.displayName}
                 onChange={handleChange}
-                label='Nombre visible'
-                labelPlacement='outside'
-                placeholder='Nombre visible'
+                label="Nombre visible"
+                labelPlacement="outside"
+                placeholder="Nombre visible"
                 classNames={{
                   label: "text-white text-sm",
                   inputWrapper: "bg-white",
@@ -150,13 +172,13 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
             </div>
 
             <Input
-              name='email'
+              name="email"
               value={formData.email}
               onChange={handleChange}
-              type='email'
-              label='Email'
-              labelPlacement='outside'
-              placeholder='tu@email.com'
+              type="email"
+              label="Email"
+              labelPlacement="outside"
+              placeholder="tu@email.com"
               isRequired
               classNames={{
                 label: "text-white text-sm",
@@ -166,13 +188,13 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
             />
 
             <Input
-              type='password'
-              name='password'
+              type="password"
+              name="password"
               value={formData.password}
               onChange={handleChange}
-              label='Contraseña'
-              labelPlacement='outside'
-              placeholder='Contraseña'
+              label="Contraseña"
+              labelPlacement="outside"
+              placeholder="Contraseña"
               isRequired
               classNames={{
                 label: "text-white text-sm",
@@ -182,13 +204,13 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
             />
 
             <Input
-              type='password'
-              name='confirmPassword'
+              type="password"
+              name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              label='Repetir contraseña'
-              labelPlacement='outside'
-              placeholder='Repetir contraseña'
+              label="Repetir contraseña"
+              labelPlacement="outside"
+              placeholder="Repetir contraseña"
               isRequired
               classNames={{
                 label: "text-white text-sm",
@@ -197,16 +219,23 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
               }}
             />
 
-            <Button type='submit' color='primary' fullWidth isLoading={isLoading} isDisabled={isLoading}>
+            <Button
+              type="submit"
+              color="primary"
+              fullWidth
+              isLoading={isLoading}
+              isDisabled={isLoading}
+            >
               {isLoading ? "Registrando..." : "Continuar"}
             </Button>
 
             <Button
-              type='button'
-              color='secondary'
+              type="button"
+              color="secondary"
               fullWidth
               onPress={() => console.log("Registro con Google")}
-              isDisabled={isLoading}>
+              isDisabled={isLoading}
+            >
               Continuar con Google
             </Button>
           </Form>

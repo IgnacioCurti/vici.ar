@@ -35,14 +35,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     try {
       await login({ email, password });
 
-      const profile = {
-        username: email.split("@")[0],
-        displayName: email.split("@")[0],
-        email,
-        description: "",
-      };
-
-      localStorage.setItem("profile", JSON.stringify(profile));
       Swal.fire({
         icon: "success",
         title: "Bienvenido a VICI.AR",

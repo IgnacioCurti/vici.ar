@@ -32,14 +32,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [token, setToken] = useState<string | null>(initialToken);
   const [isLoading, setIsLoading] = useState(false);
 
-  const register = async (data: RegisterData) => {
-    setIsLoading(true);
-    const response = await authService.register(data);
-    setToken(response.token);
-    setUser(response.user);
-    localStorage.setItem("token", response.token);
-    localStorage.setItem("user", JSON.stringify(response.user));
-  };
+const register = async (data: RegisterData) => {
+  setIsLoading(true);
+  await authService.register(data);
+};
 
   const login = async (data: LoginData) => {
     const response = await authService.login(data);
@@ -47,6 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUser(response.user);
     localStorage.setItem("token", response.token);
     localStorage.setItem("user", JSON.stringify(response.user));
+    console.log(response.user)
   };
 
   const logout = () => {
