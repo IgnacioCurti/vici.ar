@@ -15,6 +15,9 @@ coverage/
 .cache/
 .turbo/
 
+# Local working plans
+.plans/
+
 # Local editor and operating-system files
 .vscode/*
 !.vscode/extensions.json

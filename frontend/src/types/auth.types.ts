@@ -12,12 +12,13 @@ export interface LoginData {
 }
 
 export interface User {
-  id: number;
+  userId: number;
   email: string;
   username: string;
-  displayname?: string;
-  description?: string;
+  displayname: string | null;
+  description: string | null;
   emailVerified: boolean;
+  createdAt: string;
 }
 
 export interface AuthResponse {

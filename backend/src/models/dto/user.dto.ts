@@ -4,8 +4,9 @@ export type UserResponseDto = {
   userId: number;
   email: string;
   username: string;
-  displayname?: string | null;
-  description?: string | null;
+  displayname: string | null;
+  description: string | null;
+  emailVerified: boolean;
   createdAt: Date;
 };
 
@@ -15,5 +16,6 @@ export const toUserResponse = (user: User): UserResponseDto => ({
   username: user.username,
   displayname: user.displayname,
   description: user.description,
+  emailVerified: user.email_verified,
   createdAt: user.created_at,
 });
