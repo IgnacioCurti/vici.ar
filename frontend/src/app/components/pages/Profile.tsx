@@ -1,15 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { Avatar, Button, Card, CardBody, CardHeader } from "@heroui/react";
 import { PencilIcon, ShareIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 
 const Profile = () => {
   const { user, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
 
   if (!isAuthenticated || !user) {
-    navigate("/");
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   return (
