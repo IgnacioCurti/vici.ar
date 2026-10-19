@@ -91,7 +91,12 @@ describe('AuthService', () => {
     it('should successfully login user with valid credentials', async () => {
       // Arrange
       const loginDto = { email: 'user@example.com', password: 'Password123!' };
-      const mockUser = { user_id: BigInt(1), email: 'user@example.com', password: 'hashedpass' };
+      const mockUser = {
+        user_id: BigInt(1),
+        email: 'user@example.com',
+        password: 'hashedpass',
+        email_verified: true,
+      };
       const mockToken = 'jwt.token.login';
 
       (prisma.user.findUnique as any).mockResolvedValue(mockUser);

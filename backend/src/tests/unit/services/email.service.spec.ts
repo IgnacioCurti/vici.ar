@@ -1,97 +1,63 @@
-/**
- * Unit tests for EmailService
- * - Nodemailer transporter is mocked to avoid real SMTP calls.
- * - Tests email construction and delivery.
- * - Uses Arrange / Act / Assert pattern.
- */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock nodemailer usando factory function
-vi.mock('nodemailer', () => {
-  const mockSendMail = vi.fn();
-  const mockCreateTransport = vi.fn(() => ({
-    sendMail: mockSendMail
-  }));
+const { mockSend } = vi.hoisted(() => ({
+  mockSend: vi.fn(),
+}));
 
-  return {
-    default: {
-      createTransport: mockCreateTransport,
-      // Exportar para poder acceder desde los tests
-      __mockSendMail: mockSendMail,
-      __mockCreateTransport: mockCreateTransport
-    }
-  };
-});
+vi.mock('googleapis', () => ({
+  google: {
+    auth: {
+      OAuth2: vi.fn(() => ({
+        setCredentials: vi.fn(),
+      })),
+    },
+    gmail: vi.fn(() => ({
+      users: {
+        messages: {
+          send: mockSend,
+        },
+      },
+    })),
+  },
+}));
 
-import nodemailer from 'nodemailer';
 import EmailService from '../../../services/email.service.js';
 
 describe('EmailService', () => {
-  // Acceder a los mocks
-  const mockSendMail = (nodemailer as any).__mockSendMail;
-  const mockCreateTransport = (nodemailer as any).__mockCreateTransport;
-
   beforeEach(() => {
-    // Setup env vars
-    process.env.SMTP_HOST = 'smtp.example.com';
-    process.env.SMTP_PORT = '587';
-    process.env.SMTP_USER = 'test@example.com';
-    process.env.SMTP_PASS = 'password';
+    process.env.GMAIL_USER = 'test@example.com';
     process.env.FRONTEND_URL = 'http://localhost:3000';
-
-    // Clear mocks
     vi.clearAllMocks();
   });
 
   describe('sendVerificationEmail', () => {
-    it('should send verification email with correct parameters (Arrange / Act / Assert)', async () => {
-      // Arrange
-      mockSendMail.mockResolvedValue({ messageId: '123' });
+    it('sends the verification email through the Gmail API', async () => {
+      mockSend.mockResolvedValue({ data: { id: 'message-123' } });
 
-      const email = 'user@example.com';
-      const userId = 42;
-      const code = '123456';
+      await EmailService.sendVerificationEmail('recipient@example.com', 42, '123456');
 
-      // Act
-      await EmailService.sendVerificationEmail(email, userId, code);
+      expect(mockSend).toHaveBeenCalledOnce();
+      expect(mockSend).toHaveBeenCalledWith({
+        userId: 'me',
+        requestBody: { raw: expect.any(String) },
+      });
 
-      // Assert
-      expect(mockSendMail).toHaveBeenCalledWith(
-        expect.objectContaining({
-          from: expect.stringContaining('test@example.com'),
-          to: 'user@example.com',
-          subject: 'Email verification',
-          html: expect.stringContaining('123456')
-        })
-      );
+      const encodedMessage = mockSend.mock.calls[0][0].requestBody.raw;
+      const message = Buffer.from(encodedMessage, 'base64url').toString('utf8');
+      expect(message).toContain('From: "VICI.AR" <test@example.com>');
+      expect(message).toContain('To: recipient@example.com');
+      expect(message).toContain('Subject: Email Verification - VICI.AR');
+      expect(message).toContain('userId=42');
+      expect(message).toContain('code=123456');
+      expect(message).toContain('http://localhost:3000/verify-email');
     });
 
-    it('should construct verification URL with userId and code', async () => {
-      // Arrange
-      mockSendMail.mockResolvedValue({ messageId: '123' });
+    it('propagates Gmail API errors', async () => {
+      mockSend.mockRejectedValue(new Error('Gmail API unavailable'));
 
-      const email = 'test@example.com';
-      const userId = 99;
-      const code = 'ABC789';
-
-      // Act
-      await EmailService.sendVerificationEmail(email, userId, code);
-
-      // Assert
-      const callArgs = mockSendMail.mock.calls[0][0];
-      expect(callArgs.html).toContain('userId=99');
-      expect(callArgs.html).toContain('code=ABC789');
-      expect(callArgs.html).toContain('http://localhost:3000/verify-email');
-    });
-
-    it('should handle email sending errors gracefully', async () => {
-      // Arrange
-      mockSendMail.mockRejectedValue(new Error('SMTP connection failed'));
-
-      // Act & Assert
       await expect(
-        EmailService.sendVerificationEmail('user@example.com', 1, '123456')
-      ).rejects.toThrow('SMTP connection failed');
+        EmailService.sendVerificationEmail('recipient@example.com', 1, '123456'),
+      ).rejects.toThrow('Gmail API unavailable');
     });
   });
 });
